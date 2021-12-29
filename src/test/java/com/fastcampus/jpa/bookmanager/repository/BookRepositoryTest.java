@@ -4,6 +4,7 @@ import com.fastcampus.jpa.bookmanager.domain.Book;
 import com.fastcampus.jpa.bookmanager.domain.Publisher;
 import com.fastcampus.jpa.bookmanager.domain.Review;
 import com.fastcampus.jpa.bookmanager.domain.User;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,5 +80,40 @@ class BookRepositoryTest {
         publisher.setName("패스트캠퍼스");
 
         return publisherRepository.save(publisher);
+    }
+
+//    @Transactional
+    @Test
+    void bookCascadeTest() {
+        Book book = new Book();
+        book.setName("JPA 초격차 패키지");
+
+//        bookRepository.save(book);
+
+        Publisher publisher = new Publisher();
+        publisher.setName("패스트캠퍼스");
+
+//        publisherRepository.save(publisher);
+
+        book.setPublisher(publisher);
+        bookRepository.save(book);
+
+//        publisher.getBooks().add(book);
+//        publisher.addBook(book);
+//        publisherRepository.save(publisher);  // 영속성 전이를 통해 확인할 것이므로, publisher 는 별도로 save() 하지 않음
+
+        System.out.println("books : " + bookRepository.findAll());
+        System.out.println("publishers : " + publisherRepository.findAll());
+
+        Book book1 = bookRepository.findById(1L).get();
+        book1.getPublisher().setName("슬로우캠퍼스"); //update, 즉 merge 에 대한 이벤트 발생, MERGE 에 대해 cascade 하게 되어있지 않으면 영속성전이 일어나지 않음
+
+        bookRepository.save(book1);
+
+        System.out.println("publishes : " + publisherRepository.findAll());
+
+        // failed to lazily initialize a collection of role: com.fastcampus.jpa.bookmanager.domain.Publisher.books, could not initialize proxy - no Session
+        // 해결방법 1) @Transactional 어노테이션 추가
+        // 해결방법 2) Publisher.books 에 대한 ToString 제거 (@ToString.Exclude 어노테이션 추가)
     }
 }
