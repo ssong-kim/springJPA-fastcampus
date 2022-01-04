@@ -18,4 +18,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByDeletedFalse();
 
     List<Book> findByCategoryIsNullAndDeletedFalse();
+
+    List<Book> findByCategoryIsNullAndNameEqualsAndCreatedAtGreaterThanAndUpdatedAtGreaterThanEqual(String name, LocalDateTime createdAt, LocalDateTime updatedAt);
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -147,5 +149,16 @@ class BookRepositoryTest {
 
 //        bookRepository.findAllByDeletedFalse().forEach(System.out::println);
 //        bookRepository.findByCategoryIsNullAndDeletedFalse().forEach(System.out::println);
+    }
+
+    @Test
+    void queryTest() {
+        bookRepository.findAll().forEach(System.out::println);
+        System.out.println("findByCategoryIsNullAndNameEqualsAndCreatedAtGreaterThanAndUpdatedAtGreaterThanEqual : " +
+                bookRepository.findByCategoryIsNullAndNameEqualsAndCreatedAtGreaterThanAndUpdatedAtGreaterThanEqual(
+                        "JPA 초격차 패키지",
+                        LocalDateTime.now().minusDays(1L),
+                        LocalDateTime.now().minusDays(1L)
+                ));
     }
 }
