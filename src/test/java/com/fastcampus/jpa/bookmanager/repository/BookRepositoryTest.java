@@ -4,7 +4,6 @@ import com.fastcampus.jpa.bookmanager.domain.Book;
 import com.fastcampus.jpa.bookmanager.domain.Publisher;
 import com.fastcampus.jpa.bookmanager.domain.Review;
 import com.fastcampus.jpa.bookmanager.domain.User;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -115,5 +114,38 @@ class BookRepositoryTest {
         // failed to lazily initialize a collection of role: com.fastcampus.jpa.bookmanager.domain.Publisher.books, could not initialize proxy - no Session
         // 해결방법 1) @Transactional 어노테이션 추가
         // 해결방법 2) Publisher.books 에 대한 ToString 제거 (@ToString.Exclude 어노테이션 추가)
+
+//        Book book2 = bookRepository.findById(1L).get();
+//        bookRepository.delete(book2);
+
+        Book book3 = bookRepository.findById(1L).get();
+        book3.setPublisher(null);
+//
+        bookRepository.save(book3);
+
+        System.out.println("books : " + bookRepository.findAll());
+        System.out.println("publishers : " + publisherRepository.findAll());
+        System.out.println("book3-publisher : " + bookRepository.findById(1L).get().getPublisher());
+    }
+
+    @Test
+    void bookRemoveCascadeTest() {
+        bookRepository.deleteById(1L);
+
+        System.out.println("books : " + bookRepository.findAll());
+        System.out.println("publishers : " + publisherRepository.findAll());
+
+        bookRepository.findAll().forEach(book -> System.out.println(book.getPublisher()));
+    }
+
+    @Test
+    void softDelete() { // Entity 클래스에 @Where 어노테이션 사용 ( @Where(clause = "deleted = false") 하면 deleted 조건이 항상 포함됨 )
+        bookRepository.findAll().forEach(System.out::println);
+        System.out.println(bookRepository.findById(3L));
+
+//        bookRepository.findByCategoryIsNull().forEach(System.out::println);
+
+//        bookRepository.findAllByDeletedFalse().forEach(System.out::println);
+//        bookRepository.findByCategoryIsNullAndDeletedFalse().forEach(System.out::println);
     }
 }
