@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -174,5 +175,31 @@ class BookRepositoryTest {
 
         bookRepository.findBookNameAndCategory(PageRequest.of(0, 1)).forEach(
                 bookNameAndCategory -> System.out.println(bookNameAndCategory.getName() + " : " + bookNameAndCategory.getCategory()));
+    }
+
+    @Test
+    void nativeQueryTest() {
+//        bookRepository.findAll().forEach(System.out::println);
+//        bookRepository.findAllCustom().forEach(System.out::println);
+
+        /*
+        // update 쿼리 여러번 돌리게 됨
+        List<Book> books = bookRepository.findAll();
+
+        for (Book book : books) {
+            book.setCategory("IT전문서");
+        }
+
+        bookRepository.saveAll(books);
+
+        System.out.println(bookRepository.findAll());
+        */
+
+        // update 쿼리 한 번에 처리 가능
+        System.out.println("affected rows : " + bookRepository.updateCategories());
+        bookRepository.findAllCustom().forEach(System.out::println);
+
+        // 일반적인 jpa 로는 제공하지 않는 쿼리들도, nativeQuery 를 통해 생성할 수 있음
+        System.out.println(bookRepository.showTables());
     }
 }
