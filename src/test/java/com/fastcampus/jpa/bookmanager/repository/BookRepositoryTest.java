@@ -4,6 +4,7 @@ import com.fastcampus.jpa.bookmanager.domain.Book;
 import com.fastcampus.jpa.bookmanager.domain.Publisher;
 import com.fastcampus.jpa.bookmanager.domain.Review;
 import com.fastcampus.jpa.bookmanager.domain.User;
+import com.fastcampus.jpa.bookmanager.repository.dto.BookStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -201,5 +202,21 @@ class BookRepositoryTest {
 
         // 일반적인 jpa 로는 제공하지 않는 쿼리들도, nativeQuery 를 통해 생성할 수 있음
         System.out.println(bookRepository.showTables());
+    }
+
+    @Test
+    void converterTest() {
+        bookRepository.findAllCustom().forEach(System.out::println);
+
+        Book book = new Book();
+        book.setName("또다른 IT전문서적");
+        book.setStatus(new BookStatus(200));
+
+        bookRepository.save(book);
+
+        System.out.println("findAllCustom : " + bookRepository.findAllCustom());
+        System.out.println("findRawRecord : " + bookRepository.findRawRecord().values());
+
+        bookRepository.findAllCustom().forEach(System.out::println);
     }
 }

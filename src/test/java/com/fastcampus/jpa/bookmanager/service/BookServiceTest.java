@@ -42,4 +42,14 @@ class BookServiceTest {
 
         System.out.println(">>> " + bookRepository.findAll());
     }
+
+    @Test
+    void converterErrorTest() {
+        bookService.getAll();
+
+        // bookService.getAll() 메소드에 @Transactional 걸려있는 상태
+        // converter 가 완전히 다 구현되어 있지 않아 영속성 컨텍스트 오작동. status 값 null 로 업데이트됨
+        // 정방향/역방향 컨버터 중 하나만 사용한다 하더라도 구현은 모두 완전히 해야함
+        bookRepository.findAll().forEach(System.out::println);
+    }
 }

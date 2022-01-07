@@ -1,6 +1,8 @@
 package com.fastcampus.jpa.bookmanager.domain;
 
+import com.fastcampus.jpa.bookmanager.domain.converter.BookStatusConverter;
 import com.fastcampus.jpa.bookmanager.domain.listener.Auditable;
+import com.fastcampus.jpa.bookmanager.repository.dto.BookStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -68,6 +70,11 @@ public class Book extends BaseEntity {
 //    }
 
     private boolean deleted;
+
+    // BookStatusConverter 컨버터에 autoApply 속성 추가로 주석처리 (@Converter(autoApply = true))
+    // autoApply 속성 true 이면, 해당하는 Entity 타입의 컨버터를 통해 변환 일어나도록 처리됨
+//    @Convert(converter = BookStatusConverter.class)
+    private BookStatus status; // 판매상태
 
     public void addBookAndAuthors(BookAndAuthor... bookAndAuthors) {
         Collections.addAll(this.bookAndAuthors, bookAndAuthors);
