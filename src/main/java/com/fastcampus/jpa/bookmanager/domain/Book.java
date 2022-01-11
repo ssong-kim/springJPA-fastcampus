@@ -71,7 +71,7 @@ public class Book extends BaseEntity {
 
     private boolean deleted;
 
-    // BookStatusConverter 컨버터에 autoApply 속성 추가로 주석처리 (@Converter(autoApply = true))
+    // BookStatusConverter 컨버터에 autoApply 속성 추가하면 @Convert 어노테이션 없어도 처리 가능 (@Converter(autoApply = true))
     // autoApply 속성 true 이면, 해당하는 Entity 타입의 컨버터를 통해 변환 일어나도록 처리됨
 //    @Convert(converter = BookStatusConverter.class)
     private BookStatus status; // 판매상태
