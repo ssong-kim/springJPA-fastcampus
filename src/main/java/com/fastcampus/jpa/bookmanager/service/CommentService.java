@@ -23,8 +23,9 @@ public class CommentService {
         }
     }
 
-//    @Transactional
-    @Transactional(readOnly = true)
+    @Transactional
+//    @Transactional(readOnly = true) // readOnly = true 이면, dirty check 되지 않아서, save() 없으면 update 일어나지 않음
+                                        // 조회만 하는 로직에서 불필요한 dirty check 스킵함으로써, 대용량 데이터 처리시 성능적인 장점 발생
     public void updateSomething() {
         List<Comment> comments = commentRepository.findAll();
 
